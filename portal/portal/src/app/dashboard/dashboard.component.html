@@ -1,0 +1,48 @@
+<html>
+  <body>
+
+      <ul>
+          <li><a href="home/login" (click)="login()">Login</a></li>
+          <li><a href="/home/register">Register</a></li>
+         
+          <li><a href="/home" (click)="logOut()">Logout</a></li>
+          <li><a href="home">Home</a></li>
+        </ul>  
+<div class="container">
+    
+
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<br><br>
+<div class="container-fluid well span8" >
+	<div class="row-fluid">
+        <div class="span2" *ngIf="user">
+		    <img src="http://localhost:8080/{{user.ProfPic}}" class="img-circle" >
+        </div>
+        
+        <div class="span8" *ngIf="user">
+            <h3>Welcome {{user.firstname}}</h3>
+            <h4>FirstName : {{user.firstname}}</h4>
+            <h4>LastName  : {{user.lastname}}</h4>
+            <h4>BirthDate : {{user.birthdate}}</h4>
+            <h4>Gender    : {{user.gender}}</h4>
+            <h4>Hobby     : {{user.hobby}}</h4>
+            <h4>phoneNo   : {{user.phoneNo}}</h4>
+            <h4>Address   : {{user.address}} </h4>
+            <h4>City      : {{user.city}}</h4>
+            <h4>State     : {{user.state}} </h4>
+            <h4>Zipcode   : {{user.zipcode}}</h4>
+            <h4>Email     : {{user.email}}</h4>
+
+        </div>
+        
+       
+</div>
+</div>
+
+</div>
+</body>
+</html>
