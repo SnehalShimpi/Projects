@@ -4,7 +4,7 @@
         <li><a class="active" href="/home/register">Register</a></li>
         <li><a  href="home/login">Login</a></li>
         <li><a href="home">Home</a></li>
-        
+       
       </ul>
 <div class="container" style="width:70%; margin-top:5%" >
     
@@ -161,6 +161,7 @@
           <!-- <input id="state" formControlName="state" type="text" class="form-control">
            -->
            <select class="form-control" id="sel1" formControlName="state">
+              <option disabled selected value>  </option>
             <option *ngFor ="let pro of state">{{pro.state}}</option>
            
             

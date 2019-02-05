@@ -16,5 +16,6 @@ router.post('/myapi/upload/',users.uploadPiture);
 router.put('/myapi/password/',users.Update);
 router.post('/myapi/mail/',users.mail)
 router.post('/secure/userInfo/',userInfo.userInfo)
+router.delete('/myapi/delete/',users.delete)
 
 module.exports = router;

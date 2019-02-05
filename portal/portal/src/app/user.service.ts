@@ -15,6 +15,11 @@ export class UserService {
  
   private LoggedInStatus = false;
 
+  private headerOptions: any = {
+    'Content-type': 'application/json'
+  }
+  headers: HttpHeaders;
+
   url = "http://localhost:8080/myapi/users/";
   url1 = "http://localhost:8080/myapi/user/";
   stateUrl = "http://localhost:8080/myapi/states/";
@@ -23,9 +28,12 @@ export class UserService {
   resetPassword = "http://localhost:8080/myapi/password/";
   profPicture = "http://localhost:8080/myapi/upload";
   getInfo = "http://localhost:8080/secure/userInfo";
+  delete = 'http://localhost:8080/myapi/delete/'
   
  // validate = "http://localhost:8080/myapi/users/validate/";
-  constructor(private http: HttpClient , private t : ToastrService , private Router : Router) { }
+  constructor(private http: HttpClient , private t : ToastrService , private Router : Router) {
+    this.headers =new HttpHeaders(this.headerOptions)
+   }
 
   sendToken(token: string) {
     localStorage.setItem("LoggedInUser", token)
@@ -89,6 +97,12 @@ UserInfo(token){
   return this.http.post<any>(`${this.getInfo}`,{ "token" : token})
 }
 
+
+DeleteAccount(username){
+  
+console.log(username)
+  return this.http.request('delete','http://localhost:8080/myapi/delete/',{body: {"username" : username}});
+}
 
 
 

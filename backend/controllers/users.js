@@ -6,9 +6,9 @@ var jwt = require('jwt-simple');
 jwt1 = require('jsonwebtoken');
 var config = require('../config/config');
 var multer = require('multer');
-var path 
+var path
 var users = {
-    
+
     /* All data of database */
 
     getAll: function (req, res) {
@@ -19,71 +19,70 @@ var users = {
             }
             else {
                 res.status(200).json({ status: 'success', message: 'Success', docs: docs });
-              
-                
+
+
             }
         });
     },
 
     /* Upload Image */
 
-    uploadPiture: function(req, res) {
-       
-    var storage = multer.diskStorage({
-    
-    destination: function (req, file, cb) {
-    
-    cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + (file.originalname))
-    console.log(req.file);
-    
-    }
-    });
-    
-    var upload = multer({ 
-        storage: storage,
-        fileFilter : function (req,file,callback){
-            //var ext = path.extname(file.originalname);
-            console.log(file.mimetype);
-            if(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
-                callback(null, true);
+    uploadPiture: function (req, res) {
+
+        var storage = multer.diskStorage({
+
+            destination: function (req, file, cb) {
+
+                cb(null, 'uploads/')
+            },
+            filename: function (req, file, cb) {
+                cb(null, file.fieldname + '-' + (file.originalname))
+                console.log(req.file);
+
             }
-            else
-            {
-                return callback(new Error('Only Jpg & Png  images are allowed'))
-        
+        });
+
+        var upload = multer({
+            storage: storage,
+            fileFilter: function (req, file, callback) {
+                //var ext = path.extname(file.originalname);
+                console.log(file.mimetype);
+                if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+                    callback(null, true);
+                }
+                else {
+                    return callback(new Error('Only Jpg & Png  images are allowed'))
+
+                }
+            },
+            limits: {
+                fileSize: 2 * (1024 * 1024)
             }
-        },
-        limits : {
-            fileSize : 2 * ( 1024 * 1024)
-        }
-    }).single('photo');
-    
-    
-    upload(req, res, function (err) {
-       
-    if (err) {
-    res.status(200).json({ status: false ,   err : err.message , docs: '' });
-    } else {
-        this.path = req.file.path;
-        console.log(this.path);
-    res.status(200).json({ status:  true  , message: 'Picture is Successfully uploaded' , });
-    }
-    
-    });
+        }).single('photo');
+
+
+        upload(req, res, function (err) {
+
+            if (err) {
+                res.status(200).json({ status: false, err: err.message, docs: '' });
+            } else {
+                this.path = req.file.path;
+                console.log(this.path);
+                res.status(200).json({ status: true, message: 'Picture is Successfully uploaded', });
+            }
+
+        });
     },
-    
+
     /* create new user */
-    
+
     create: function (req, res) {
         var flag = null;
         var hobbies;
         var user = new userModel();
         user.firstname = req.body.firstname;
         user.lastname = req.body.lastname;
-        user.birthdate = (req.body.birthdate).slice(0,10);
+        user.birthdate = (req.body.birthdate).slice(0, 10);
         user.gender = req.body.gender;
         hobbies = filter_array(req.body.hobby);
         console.log(hobbies);
@@ -98,17 +97,17 @@ var users = {
         user.confirmPassword = req.body.confirmPassword;
         user.username = req.body.username;
         user.ProfPic = this.path;
-        
-        
-   
-         /* unique mail and unique email */
-         
-         userModel.find(function (err, docs) {
- 
-             if (err) {
-                 res.status(500).json({ status: 'error', message: 'Datebase Error:' + err, docs: '' });
-             }
-             else {
+
+
+
+        /* unique mail and unique email */
+
+        userModel.find(function (err, docs) {
+
+            if (err) {
+                res.status(500).json({ status: 'error', message: 'Datebase Error:' + err, docs: '' });
+            }
+            else {
 
                 for (i = 0; i < docs.length; i++) {
                     if (user.email === docs[i].email) {
@@ -116,7 +115,7 @@ var users = {
                         flag = 1;
                         break;
                     }
-                    else if(user.username == docs[i].username){
+                    else if (user.username == docs[i].username) {
                         flag = 2;
                         break;
                     }
@@ -124,7 +123,7 @@ var users = {
                     else {
                         flag = 0;
                     }
-                    
+
                 }
                 //console.log(docs[0].username);
             }
@@ -132,12 +131,12 @@ var users = {
             if (flag == 1) {
 
                 console.log("already in use");
-                res.status(200).json({ status: 1,  err: " Email should be unique" } );
+                res.status(200).json({ status: 1, err: " Email should be unique" });
 
             }
-            else if(flag == 2){
+            else if (flag == 2) {
                 console.log("already in use");
-                res.status(200).json({ status: 2 , err: "username Should be unique"});
+                res.status(200).json({ status: 2, err: "username Should be unique" });
             }
             else {
                 console.log("unique");
@@ -147,7 +146,7 @@ var users = {
                     }
                     else {
                         this.path = null;
-                        res.status(200).json({ status: 'success', message: 'Added to Mongo successfully', doc: '' });
+                        res.status(200).json({ status: 123 , message: 'Added to Mongo successfully', doc: '' });
                     }
 
                 });
@@ -159,38 +158,38 @@ var users = {
     login: function (req, res) {
 
         userModel.findOne(
-            { $and:[
-                      {'username' : req.body.username},
-                      {'password': req.body.password}
-                    ]
+            {
+                $and: [
+                    { 'username': req.body.username },
+                    { 'password': req.body.password }
+                ]
             },
-             function(err, user)
-             {
-                 console.log(req.body.username)
-                 console.log(req.body.password)
-                 console.log("************");
-                 console.log(user);
-              
-                 if(err || !user) {
-                    res.status(200).json({status:false , message: 'Authentication Error:', docs:''});
-                  }
-                  else {
-                             var payload = { username : user.username};
-                             var token = jwt.encode(payload, config.secretKey);
-                             jwt1.sign({
-                                data: payload
-                              }, 'secret', { expiresIn: '1h' });
-                            res.status(200).json({status:true , message: ' successfull', token: token});
-                  }
-           
-          });
+            function (err, user) {
+                console.log(req.body.username)
+                console.log(req.body.password)
+                console.log("************");
+                console.log(user);
+
+                if (err || !user) {
+                    res.status(200).json({ status: false, message: 'Authentication Error:', docs: '' });
+                }
+                else {
+                    var payload = { username: user.username };
+                    var token = jwt.encode(payload, config.secretKey);
+                    jwt1.sign({
+                        data: payload
+                    }, 'secret', { expiresIn: '1h' });
+                    res.status(200).json({ status: true, message: ' successfull', token: token });
+                }
+
+            });
 
 
 
-        
+
 
     },
-      /* send forgot password link on mail */
+    /* send forgot password link on mail */
     mail: function (req, res) {
         var flag = null;
         var user = new userModel()
@@ -215,7 +214,7 @@ var users = {
                     }
 
                 }
-              
+
             }
 
             if (flag == 1) {
@@ -268,7 +267,7 @@ var users = {
 
             }
             else {
-             
+
                 console.log("not register");
                 res.status(200).json({ status: false, message: 'Error', docs: { err: "not register mail" } });
 
@@ -279,7 +278,7 @@ var users = {
 
     },
 
-     /* Update Password*/ 
+    /* Update Password*/
     Update: function (req, res) {
         console.log(req.body)
         var user = userModel;
@@ -333,23 +332,36 @@ var users = {
                 }
             }
         });
-        
-       
+
+
 
 
 
     },
 
-    demo : function (req,res){
+    demo: function (req, res) {
         const cryptr = new Cryptr('myTotalySecretKey');
         const encryptedString = cryptr.encrypt('bacon');
         const decryptedString = cryptr.decrypt(encryptedString);
- 
-            console.log(encryptedString); 
-            console.log(decryptedString); 
-    },
-   
 
+        console.log(encryptedString);
+        console.log(decryptedString);
+    },
+    delete: function (req, res,err) {
+
+        console.log("inside delete");
+        console.log(req.body.username)
+        
+       var myquery = { username : req.body.username};
+       
+       // console.log(decode.username)
+        userModel.remove(myquery, function(err, obj) {
+            if (err) throw err;
+            console.log( " document(s) deleted");
+        
+        });
+    }
+                
 
 
 
@@ -357,6 +369,9 @@ var users = {
 
 
 }
+
+
+
 function filter_array(test_array) {
     console.log("inside filter array")
     var index = -1,

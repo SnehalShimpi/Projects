@@ -61,7 +61,7 @@ export class RegisterComponent implements OnInit {
       phoneNo: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]],
       address: [''],
       city: ['',Validators.required],
-      state: [' ', Validators.required],
+      state: ['', Validators.required],
       zipcode: ['', [Validators.required, Validators.maxLength(6), Validators.minLength(6),Validators.pattern('^[0-9]*$')]],
       email: ['', [Validators.required, Validators.email]],
 
@@ -71,6 +71,9 @@ export class RegisterComponent implements OnInit {
       ProfPic : ['',Validators.required],
     }, { validator: MustMatch('password', 'confirmPassword')}
     )
+    this.userForm.patchValue({
+      state :''
+    })
     
   }
 
@@ -132,6 +135,9 @@ export class RegisterComponent implements OnInit {
         console.log(this.userForm.value);
        
         console.log(res);
+        if(res.status == 123){
+          this.t.success("Succesfully register user");
+        }
       if(res.status == 1){
         this.t.error('status', 'Email already in use');
       }

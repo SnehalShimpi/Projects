@@ -31,20 +31,20 @@ export class LoginComponent implements OnInit {
 login(){
   console.log(this.loginForm.value)
 this.userService.login(this.loginForm.value).subscribe((res : any) => {
-  if (this.loginForm.valid) {
-    this.userService.sendToken(res.token)
   
-   
-  }
 
 if(res.status == true){
-
+  this.userService.sendToken(res.token)
   this.T.success('status', "Login Succesfully Done");
   this.router.navigate(["dashboard"]);
  
-}else{
+}
+
+if(res.status == false){
+  console.log(res)
   console.log("not done");
   this.T.error('status', "Login failed");
+  
 }
 });
 }

@@ -35,7 +35,7 @@ users.demo();
 
 
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:4200'}));
 app.all('/*',function(req,res,next){
 
 res.header("Allow-Control-Allow-Order","*");
